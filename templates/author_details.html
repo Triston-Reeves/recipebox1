@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Details</title>
+</head>
+<body>
+    
+    <div class="container">
+
+        {% if not author %}
+            <h2>The author of this recipe is unknown!</h2>
+        {% else %}
+            <h2>Author: {{ author.name }}</h2>
+            <h3>Bio: {{ author.bio }}</h3>
+            <h3>Recipes published by this author: </h3>           
+            <ul>
+                {% for recipe in recipes %}
+                    <li>               
+                        <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>    
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+
+    </div>
+    
+</body>
+</html>

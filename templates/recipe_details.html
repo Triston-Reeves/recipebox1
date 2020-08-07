@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details</title>
+</head>
+<body>
+
+    <div class="container">
+        {% if not recipe %}
+            <h2>The recipe you're looking for doesn't exixst!</h2>
+        {% else %}
+            <h2>{{ recipe.title }}</h2>
+            <h3>Author: <a href="/author/{{ recipe.author.id }}">{{ recipe.author.name }}</a></h3>
+            <p>Description: {{ recipe.description }}</p>
+            <p>Time Required: {{ recipe.time_required }}</p>
+            <p>Instructions: {{ recipe.instructions }}</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
