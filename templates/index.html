@@ -6,16 +6,19 @@
     <title>RecipeBox</title>
 </head>
 <body>
-    <h1>Recipe Box</h1>
+    <h1 style="font-size:70px; text-align:center;"><u>Recipe Box</u></h1>
     <br>
-    <ul>
+    <ul style="width:175px; margin-left:auto; margin-right: auto;">
         {% for recipe in recipes %}
             <li>               
-                <a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a>    
+                <a href="/recipe/{{ recipe.id }}" style="color:blue;">{{ recipe.title }}</a>    
             </li>
         {% endfor %}
     </ul>
-    <h3><a href="/addrecipe/">Add New Recipe</a></h3>
-    <h3><a href="/addauthor/">Add New Author</a></h3>
+    <div style="width: 175px; margin-left: auto; margin-right: auto;">
+        <button><a href="/addrecipe/" style="color:black;">Add New Recipe</a></button>
+        <br>
+        <button><a href="/addauthor/" style="color:black">Add New Author</a></button>
+    </div>
 </body>
 </html>

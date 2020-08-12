@@ -7,15 +7,15 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" style="text-align:center">
         {% if not recipe %}
             <h2>The recipe you're looking for doesn't exixst!</h2>
         {% else %}
-            <h2>{{ recipe.title }}</h2>
-            <h3>Author: <a href="/author/{{ recipe.author.id }}">{{ recipe.author.name }}</a></h3>
-            <p>Description: {{ recipe.description }}</p>
-            <p>Time Required: {{ recipe.time_required }}</p>
-            <p>Instructions: {{ recipe.instructions }}</p>
+            <h1 style="font-size: 50px;"><u>{{ recipe.title }}</u></h1>
+            <h3 style="font-size: 25px;">Author: <a href="/author/{{ recipe.author.id }}" style="color:blue;">{{ recipe.author.name }}</a></h3>
+            <p style="font-size: 22px;">Description: {{ recipe.description }}</p>
+            <p style="font-size: 22px;">Time Required: {{ recipe.time_required }}</p>
+            <p style="font-size: 22px;">Instructions: {{ recipe.instructions }}</p>
         {% endif %}
     </div>
 
