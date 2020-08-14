@@ -49,3 +49,7 @@ def add_author(request):
 
     form = AddAuthorForm()
     return render(request, "add_author_form.html", {"form": form})
+
+    """
+    Made a new branch.
+    """
