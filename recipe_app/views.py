@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from recipe_app.models import Recipe, Author
-from recipe_app.forms import AddRecipeForm, AddAuthorForm, LoginForm, SignupForm
+from recipe_app.forms import AddRecipeForm, AddAuthorForm, LoginForm #SignupForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -48,7 +48,7 @@ def add_author(request):
             form = AddAuthorForm(request.POST)
             if form.is_valid():
                 data = form.cleaned_data
-                new_user = User.objects.create_user(username=data.get("username"), password=data.get("password"))
+                new_user = User.objects.create_user(username=data.get('username'), password=data.get('password'))
                 Author.objects.create(
                     name=data.get("name"),
                     bio=data.get("bio"),
