@@ -1,6 +1,10 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from recipe_app.models import Recipe, Author
-from recipe_app.forms import AddRecipeForm, AddAuthorForm
+from recipe_app.forms import AddRecipeForm, AddAuthorForm, LoginForm, SignupForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 
 def index(request):
     my_recipes = Recipe.objects.all()
@@ -18,6 +22,7 @@ def author_details(request, author_id):
     return render(request, "author_details.html", {"author": my_author, "recipes": my_recipe})
 
 
+@login_required
 def add_recipe(request):
     if request.method == "POST":
         form = AddRecipeForm(request.POST)
@@ -36,6 +41,7 @@ def add_recipe(request):
     return render(request, "add_recipe_form.html", {"form": form})
 
 
+@login_required
 def add_author(request):
     if request.method == "POST":
         form = AddAuthorForm(request.POST)
@@ -50,6 +56,35 @@ def add_author(request):
     form = AddAuthorForm()
     return render(request, "add_author_form.html", {"form": form})
 
-    """
-    Made a new branch.
-    """
+
+def login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = authenticate(request, username=data.get("username"), password=data.get("password"))
+            if user:
+                login(request, user)
+                return HttpResponseRedirect(request.GET.get("next",reverse("homepage")))
+
+    form = LoginForm()
+    return render(request, "login_form.html", {"form": form})
+
+
+def signup_view(request):
+    if request.method =="POST":
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            new_user = User.objects.create_user(username=data.get("username"), password=data.get("password"))
+            login(request, new_user)
+            return HttpResponseRedirect(reverse("homepage"))
+
+    form = SignupForm()
+    return render(request, "signup_form.html", {"form": form})
+    
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("homepage"))
