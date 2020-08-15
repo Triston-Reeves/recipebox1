@@ -4,7 +4,7 @@ from recipe_app.forms import AddRecipeForm, AddAuthorForm, LoginForm, SignupForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.http import HttpResponseForbidden
 
 def index(request):
     my_recipes = Recipe.objects.all()
@@ -30,7 +30,7 @@ def add_recipe(request):
             data = form.cleaned_data
             Recipe.objects.create(
                 title=data.get("title"),
-                author=data.get("author"),
+                author=request.user.author,
                 description=data.get("description"),
                 time_required=data.get("time_required"),
                 instructions=data.get("instructions"),
@@ -43,16 +43,20 @@ def add_recipe(request):
 
 @login_required
 def add_author(request):
-    if request.method == "POST":
-        form = AddAuthorForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            Author.objects.create(
-                name=data.get("name"),
-                bio=data.get("bio"),
-            )
+    if request.user.is_staff:
+        if request.method == "POST":
+            form = AddAuthorForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                new_user = User.objects.create_user(username=data.get("username"), password=data.get("password"))
+                Author.objects.create(
+                    name=data.get("name"),
+                    bio=data.get("bio"),
+                    user=new_user
+                )
             return HttpResponseRedirect(reverse("homepage"))
-
+    else:
+        return HttpResponseForbidden("You don't have permission to add an author")
     form = AddAuthorForm()
     return render(request, "add_author_form.html", {"form": form})
 
@@ -69,20 +73,6 @@ def login_view(request):
 
     form = LoginForm()
     return render(request, "login_form.html", {"form": form})
-
-
-def signup_view(request):
-    if request.method =="POST":
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            new_user = User.objects.create_user(username=data.get("username"), password=data.get("password"))
-            login(request, new_user)
-            return HttpResponseRedirect(reverse("homepage"))
-
-    form = SignupForm()
-    return render(request, "signup_form.html", {"form": form})
-    
 
 
 def logout_view(request):
